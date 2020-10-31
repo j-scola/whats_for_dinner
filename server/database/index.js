@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+mongoose.set('useFindAndModify', false);
 mongoose.connect('mongodb://localhost/dinner_options', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;

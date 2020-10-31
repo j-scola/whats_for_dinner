@@ -1,13 +1,14 @@
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const router = require('./router');
 
 const app = express();
 const port = 3000;
 
 app.use(morgan('combined'));
-app.use(express.urlencoded()); // Parse URL-encoded bodies
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json()); // Used to parse JSON bodies
 
 app.use('/api', router); // all api routes in ./router

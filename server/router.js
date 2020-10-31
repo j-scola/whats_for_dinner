@@ -10,5 +10,7 @@ router.get('/', (req, res) => {
 router.get('/data', control.data);
 router.get('/ingredients', control.getIngredients);
 router.post('/ingredients', control.addIngredient);
+router.patch('/ingredients', control.updateIngredient);
+router.delete('/ingredients', control.removeIngredient);
 
 module.exports = router;
