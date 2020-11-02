@@ -1,34 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import axios from 'axios';
-
-import DummyData from '../../dummydata';
+import ListItem from './ListItem';
 
 class RecipeOptions extends React.Component {
   constructor(props) {
     super(props);
+    // const { recipes } = this.props;
     this.state = {
-      recipes: [],
+      // recipes: [],
     };
   }
 
-  componentDidMount() {
-    // const { ingredients } = this.props;
-    // axios.get('/api/recipes', {
-    //   params: {
-    //     ingredients: JSON.stringify(ingredients),
-    //   },
-    // })
-    //   .then()
-    //   .catch();
-
-    this.setState({ recipes: DummyData });
-  }
-
   render() {
-    const { recipes } = this.state;
-    const list = recipes.map((recipe) => (<li key={Math.random()}>{recipe.title}</li>));
+    const { recipes } = this.props;
+    const list = recipes.map((recipe) => (<ListItem key={Math.random()} recipe={recipe} />));
     return (
       <ul>
         {list}
@@ -37,9 +23,9 @@ class RecipeOptions extends React.Component {
   }
 }
 
-// RecipeOptions.propTypes = {
-//   // ingredients: PropTypes.string,
-//   ingredients: PropTypes.isArray(PropTypes.string).isRequired,
-// };
+RecipeOptions.propTypes = {
+  // ingredients: PropTypes.string,
+  recipes: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default RecipeOptions;

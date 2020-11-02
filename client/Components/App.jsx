@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-// import _ from 'lodash';
+import _ from 'lodash';
 
 import IngredientsForm from './Ingredients/Form';
 import IngredientsList from './Ingredients/List';
@@ -19,11 +19,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       ingredients: [],
-      // ingredientMode: true,
+      recipes: [],
+      // recipeMode: true,
     };
     this.getIngredients = this.getIngredients.bind(this);
     this.addIngredient = this.addIngredient.bind(this);
     this.resetList = this.resetList.bind(this);
+    this.getRecipes = this.getRecipes.bind(this);
   }
 
   componentDidMount() {
@@ -31,11 +33,31 @@ class App extends React.Component {
   }
 
   getIngredients() {
-    axios.get('/api/ingredients')
-      .then((response) => {
-        const ingredients = response.data.map((item) => item.name);
-        this.setState({ ingredients });
-      })
+    const { ingredients } = this.state;
+    if (ingredients.length) {
+      axios.get('/api/ingredients')
+        .then((response) => {
+          const ingredients = response.data.map((item) => item.name);
+          this.setState({ ingredients }, this.getRecipes);
+        })
+        .catch(console.log);
+    }
+  }
+
+  getRecipes() {
+    // turns ingredients into comma,separated,string,without,spaces
+    const stringMaker = (array) => {
+      let result = '';
+      _.each(array, (string) => {
+        result += string + ',';
+      });
+      result = result.slice(0, -1);
+      return result;
+    };
+    const { ingredients } = this.state;
+    const string = stringMaker(ingredients);
+    axios.get(`api/recipes?i=${string}`)
+      .then((response) => this.setState({ recipes: response.data }))
       .catch(console.log);
   }
 
@@ -55,7 +77,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { ingredients } = this.state;
+    const { ingredients, recipes } = this.state;
     return (
       <AppContainer>
         <div className="formPanel">
@@ -65,7 +87,7 @@ class App extends React.Component {
         </div>
         <div className="listPanel">
           <h2>Recipe Options</h2>
-          <RecipeOptions ingredients={ingredients} />
+          <RecipeOptions recipes={recipes} />
         </div>
 
       </AppContainer>

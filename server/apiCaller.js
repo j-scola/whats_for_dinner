@@ -5,6 +5,7 @@ const getRecipies = (ingredients, search, successCb, failCb) => {
   if (search) {
     url += `&q=${search}`;
   }
+  console.log(url);
   axios.get(url)
     .then(successCb)
     .catch(failCb);

@@ -28,8 +28,8 @@ module.exports = {
     model.removeAllIngredients(defaultCallback(req, res, 500, 202));
   },
   getRecipes: (req, res) => {
-    const { ingredients, search } = req.body;
-    apiCaller(ingredients, search,
+    const { i, q } = req.query;
+    apiCaller(i, q,
       (data) => {
         res.status(200).send(JSON.stringify(data.data.results));
       },
