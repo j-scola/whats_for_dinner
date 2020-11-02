@@ -46,9 +46,11 @@ class App extends React.Component {
       .catch(console.log);
   }
 
+  // add api call to remove or strikethrough ??
+
   resetList() {
     axios.delete('/api/ingredients/all')
-      .then(this.setState({ ingredients: [] }))
+      .then(this.getIngredients)
       .catch(console.log);
   }
 

@@ -2,23 +2,29 @@ const Ingredient = require('../index.js');
 
 module.exports = {
   getIngredients: (cb) => {
-    Ingredient.find({}, cb);
+    Ingredient.find({ isDeleted: false }, cb);
   },
   addIngredient: (info, cb) => {
-    const item = new Ingredient(info);
+    const newIngredient = {
+      name: info.name,
+      isAvailable: true,
+      isDeleted: false,
+      isModified: false,
+    };
+    const item = new Ingredient(newIngredient);
     item.save({ validateBeforeSave: true }, cb);
   },
   updateIngredient: (target, newInfo, cb) => {
-    const update = {
-      $set: {
-        name: newInfo.name,
-        status: 'modified',
-      },
-      new: true,
-    };
+    const update = { $set: { name: newInfo.name } };
     Ingredient.findOneAndUpdate(target, update, cb);
   },
   removeIngredient: (info, cb) => {
-    Ingredient.findOneAndDelete(info, cb);
+    const name = info;
+    const query = { name };
+    const update = { $set: { isDeleted: true } };
+    Ingredient.findOneAndUpdate(query, update, cb);
+  },
+  removeAllIngredients: (cb) => {
+    Ingredient.updateMany({}, { $set: { isDeleted: true } }, cb);
   },
 };

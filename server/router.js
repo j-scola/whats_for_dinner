@@ -7,11 +7,11 @@ router.get('/', (req, res) => {
   res.send('routes active');
 });
 
-router.get('/data', control.data);
 router.get('/ingredients', control.getIngredients);
+router.get('/recipes', control.getRecipes);
 router.post('/ingredients', control.addIngredient);
 router.patch('/ingredients', control.updateIngredient);
-router.delete('/ingredients/all', control.clearIngredients);
-router.delete('/ingredients/:name', control.removeIngredient);
+router.delete('/ingredients/one', control.removeIngredient);
+router.delete('/ingredients/all', control.removeAllIngredients);
 
 module.exports = router;

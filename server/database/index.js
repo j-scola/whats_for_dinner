@@ -11,6 +11,9 @@ db.once('open', () => {
 
 const ingredients = new mongoose.Schema({
   name: String,
+  isAvailable: Boolean,
+  isDeleted: Boolean,
+
 });
 
 const Ingredient = db.model('Ingredient', ingredients);
