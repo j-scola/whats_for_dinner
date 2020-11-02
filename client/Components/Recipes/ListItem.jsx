@@ -47,7 +47,7 @@ class ListItem extends React.Component {
         <VoterWrap>
           <Voter
             increment={increment || this.increment}
-            decrement={this.decrement}
+            decrement={decrement || this.decrement}
             recipe={recipe}
             count={count}
           />
@@ -66,7 +66,7 @@ ListItem.propTypes = {
   // ingredients: PropTypes.string,
   recipe: PropTypes.objectOf(PropTypes.string).isRequired,
   increment: PropTypes.func,
-  // decrement: PropTypes.func,
+  decrement: PropTypes.func,
 };
 
 ListItem.defaultProps = {

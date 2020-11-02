@@ -22,19 +22,19 @@ const DownArrow = styled.button`
 `;
 
 const Voter = ({
-  count, increment, decriment, recipe,
+  count, increment, decrement, recipe,
 }) => (
   <Box>
     <UpArrow onClick={() => increment(recipe)} type="button" className="increment"> /\ </UpArrow>
     <Count>{count}</Count>
-    <DownArrow onClick={decriment} type="button" className="decrement"> \/ </DownArrow>
+    <DownArrow onClick={(e) => decrement(e)} type="button" className="decrement"> \/ </DownArrow>
   </Box>
 );
 
 Voter.propTypes = {
   count: PropTypes.number,
   increment: PropTypes.func.isRequired,
-  decriment: PropTypes.func.isRequired,
+  decrement: PropTypes.func.isRequired,
   recipe: PropTypes.object.isRequired,
 };
 
