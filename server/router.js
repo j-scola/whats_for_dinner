@@ -11,6 +11,7 @@ router.get('/data', control.data);
 router.get('/ingredients', control.getIngredients);
 router.post('/ingredients', control.addIngredient);
 router.patch('/ingredients', control.updateIngredient);
-router.delete('/ingredients', control.removeIngredient);
+router.delete('/ingredients/all', control.clearIngredients);
+router.delete('/ingredients/:name', control.removeIngredient);
 
 module.exports = router;

@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class IngredientsForm extends React.Component {
   constructor(props) {
@@ -17,15 +18,17 @@ class IngredientsForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { enterIngredient } = this.state;
-    this.props.addIngredient(enterIngredient);
+    const { addIngredient } = this.props;
+    addIngredient(enterIngredient);
+    this.setState({ enterIngredient: '' });
   }
 
   render() {
     const { enterIngredient } = this.state;
     return (
       <div>
-        <h2>Ingredients</h2>
-        <form>
+        <h2>Ingredients List</h2>
+        <form onSubmit={this.handleSubmit}>
           <label htmlFor="enterIngredient">
             Ingredient:
             <input id="enterIngredient" type="text" name="name" value={enterIngredient} onChange={this.handleChange} />
@@ -36,5 +39,14 @@ class IngredientsForm extends React.Component {
     );
   }
 }
+
+IngredientsForm.propTypes = {
+  // ingredients: PropTypes.string,
+  addIngredient: PropTypes.func.isRequired,
+};
+
+IngredientsForm.defaultProps = {
+  // enterIngredient: ['ingredients will be added here'],
+};
 
 export default IngredientsForm;

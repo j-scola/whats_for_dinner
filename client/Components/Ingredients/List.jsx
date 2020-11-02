@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import ListItem from './ListItem.jsx';
@@ -6,14 +6,13 @@ import ListItem from './ListItem.jsx';
 class IngredientsList extends React.Component {
   constructor(props) {
     super(props);
-    const { ingredients } = props;
     this.state = {
-      ingredients,
+      ingredientsList: props.ingredients,
     };
   }
 
   render() {
-    const { ingredients } = this.state;
+    const { ingredients } = this.props;
     const ingrList = ingredients.map((item) => <ListItem ingredient={item} key={Math.random()} />);
 
     return (
