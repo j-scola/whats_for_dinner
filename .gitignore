@@ -1,5 +1,8 @@
 ### node etc ###
 
+# Webpack
+bundle.js
+
 # Logs
 logs
 *.log

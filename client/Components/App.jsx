@@ -14,6 +14,11 @@ const AppContainer = styled.div`
   justify-content: space-around;
 `;
 
+const RecipeListPanel = styled.div`
+  width: 40%;
+
+`;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -33,31 +38,35 @@ class App extends React.Component {
   }
 
   getIngredients() {
-    const { ingredients } = this.state;
-    if (ingredients.length) {
-      axios.get('/api/ingredients')
-        .then((response) => {
-          const ingredients = response.data.map((item) => item.name);
-          this.setState({ ingredients }, this.getRecipes);
-        })
-        .catch(console.log);
-    }
+    axios.get('/api/ingredients')
+      .then((response) => {
+        const ingredients = response.data.map((item) => item.name);
+        this.setState({ ingredients }, () => {
+          console.log(response.data.length);
+          if (response.data.length) {
+            this.getRecipes();
+          } else {
+            this.setState({ recipes: [] });
+          }
+        });
+      })
+      .catch(console.log);
   }
 
   getRecipes() {
     // turns ingredients into comma,separated,string,without,spaces
+    const { ingredients } = this.state;
     const stringMaker = (array) => {
       let result = '';
       _.each(array, (string) => {
-        result += string + ',';
+        result += `${string},`;
       });
       result = result.slice(0, -1);
       return result;
     };
-    const { ingredients } = this.state;
     const string = stringMaker(ingredients);
     axios.get(`api/recipes?i=${string}`)
-      .then((response) => this.setState({ recipes: response.data }))
+      .then((response) => this.setState({ recipes: response.data }, console.log))
       .catch(console.log);
   }
 
@@ -85,10 +94,10 @@ class App extends React.Component {
           <IngredientsList ingredients={ingredients} />
           <ClearIngredients resetList={this.resetList} />
         </div>
-        <div className="listPanel">
+        <RecipeListPanel>
           <h2>Recipe Options</h2>
           <RecipeOptions recipes={recipes} />
-        </div>
+        </RecipeListPanel>
 
       </AppContainer>
     );
