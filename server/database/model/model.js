@@ -1,4 +1,4 @@
-const Ingredient = require('../index.js');
+const { Ingredient, Recipe } = require('../index.js');
 
 module.exports = {
   getIngredients: (cb) => {
@@ -26,5 +26,13 @@ module.exports = {
   },
   removeAllIngredients: (cb) => {
     Ingredient.updateMany({}, { $set: { isDeleted: true } }, cb);
+  },
+  saveRecipe: (recipe, cb) => {
+    const saveRecipe = new Recipe(recipe);
+    saveRecipe.isSaved = true;
+    saveRecipe.save({ validateBeforeSave: true }, cb);
+  },
+  archiveRecipe: (title, cb) => {
+    Recipe.findOneAndUpdate({ title }, { $set: { isSaved: false } }, cb);
   },
 };

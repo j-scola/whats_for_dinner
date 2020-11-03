@@ -13,9 +13,17 @@ const ingredients = new mongoose.Schema({
   name: String,
   isAvailable: Boolean,
   isDeleted: Boolean,
+});
 
+const recipes = new mongoose.Schema({
+  title: String,
+  href: String,
+  ingredients: String,
+  thumbnail: String,
+  isSaved: Boolean,
 });
 
 const Ingredient = db.model('Ingredient', ingredients);
+const Recipe = db.model('Recipe', recipes);
 
-module.exports = Ingredient;
+module.exports = { Ingredient, Recipe };

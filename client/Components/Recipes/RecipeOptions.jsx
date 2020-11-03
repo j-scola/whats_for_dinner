@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import ListItem from './ListItem';
 
@@ -22,13 +23,38 @@ class RecipeOptions extends React.Component {
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
+    this.getSavedRecipes = this.getSavedRecipes.bind(this);
+  }
+
+  getSavedRecipes() {
+    axios.get('/api/savedRecipes')
+      .then((response) => this.setState({ savedRecipes: response.data }))
+      .catch(console.log);
   }
 
   saveRecipe(recipe) {
+    console.log(recipe);
+    const upload = {
+      title: recipe.title,
+      href: recipe.href,
+      ingredients: recipe.ingredients,
+      thumbnail: recipe.thumbnail,
+
+    }
+
+    axios.post('/api/savedRecipies', recipe)
+      .then(this.getSavedRecipes)
+      .catch(console.log);
+
     const { savedRecipes } = this.state;
+
     savedRecipes.push(recipe);
     savedRecipes[savedRecipes.length - 1].count = 1;
     this.setState({ savedRecipes });
+  }
+
+  updateRecipeCount() {
+
   }
 
   removeRecipe(recipe) {
@@ -59,6 +85,7 @@ class RecipeOptions extends React.Component {
     return (
       <div>
         <SavedList>
+          Saved Recipes:
           <ul>
             {savedList}
           </ul>

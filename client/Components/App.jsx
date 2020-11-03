@@ -12,6 +12,7 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
 `;
 
 const RecipeListPanel = styled.div`
@@ -42,7 +43,6 @@ class App extends React.Component {
       .then((response) => {
         const ingredients = response.data.map((item) => item.name);
         this.setState({ ingredients }, () => {
-          console.log(response.data.length);
           if (response.data.length) {
             this.getRecipes();
           } else {

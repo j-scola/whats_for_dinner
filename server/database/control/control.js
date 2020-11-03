@@ -38,4 +38,8 @@ module.exports = {
         res.sendStatus(400);
       });
   },
+  saveRecipe: (req, res) => {
+    model.saveRecipe(req.body.recipe, defaultCallback(req, res, 400, 201));
+  },
+
 };
