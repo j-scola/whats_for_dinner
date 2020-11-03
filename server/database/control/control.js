@@ -45,7 +45,6 @@ module.exports = {
     model.saveRecipe(req.body, defaultCallback(req, res, 400, 201));
   },
   archiveRecipe: (req, res) => {
-    console.log(req.body);
     model.archiveRecipe(req.body.recipe.title, defaultCallback(req, res, 400, 202));
   },
   updateVote: (req, res) => {

@@ -39,7 +39,6 @@ module.exports = {
     Recipe.findOneAndUpdate({ title, isSaved: true }, { $set: { isSaved: false } }, cb);
   },
   updateVote: (recipe, voteCount, cb) => {
-    console.log(voteCount);
     Recipe.findOneAndUpdate(recipe, { $set: { voteCount } }, cb);
   },
 };

@@ -18,7 +18,6 @@ const SavedList = styled.div`
 class RecipeOptions extends React.Component {
   constructor(props) {
     super(props);
-    // const { recipes } = this.props;
     this.state = {
       savedRecipes: [],
     };
@@ -27,24 +26,32 @@ class RecipeOptions extends React.Component {
     this.getSavedRecipes = this.getSavedRecipes.bind(this);
     this.incrementVote = this.incrementVote.bind(this);
     this.decrementVote = this.decrementVote.bind(this);
+    this.timer = this.timer.bind(this);
   }
 
   componentDidMount() {
     this.getSavedRecipes();
+    this.timer();
   }
 
   getSavedRecipes() {
     axios.get('/api/savedRecipes')
       .then((response) => {
-        console.log(response.data);
         const recipes = _.orderBy(response.data, 'voteCount', 'desc');
         this.setState({ savedRecipes: recipes });
       })
       .catch(console.log);
   }
 
+  timer() {
+    console.log('timer');
+    setTimeout(() => {
+      this.getSavedRecipes();
+      this.timer();
+    }, 4000);
+  }
+
   saveRecipe(recipe) {
-    console.log(recipe);
     const upload = {
       title: recipe.title,
       href: recipe.href,
@@ -53,13 +60,10 @@ class RecipeOptions extends React.Component {
       voteCount: 1,
       isSaved: true,
     };
-
     axios.post('/api/savedRecipes', upload)
       .then(this.getSavedRecipes)
       .catch(console.log);
-
     const { savedRecipes } = this.state;
-
     savedRecipes.push(recipe);
     savedRecipes[savedRecipes.length - 1].count = 1;
     this.setState({ savedRecipes });
@@ -84,7 +88,6 @@ class RecipeOptions extends React.Component {
   }
 
   removeRecipe(recipe) {
-    console.log('deleting ' + recipe.title);
     axios({
       method: 'delete',
       url: 'api/savedRecipes',
