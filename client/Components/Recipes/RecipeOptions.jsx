@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import axios from 'axios';
+import _ from 'lodash';
 
 import ListItem from './ListItem';
 
@@ -36,7 +37,8 @@ class RecipeOptions extends React.Component {
     axios.get('/api/savedRecipes')
       .then((response) => {
         console.log(response.data);
-        this.setState({ savedRecipes: response.data });
+        const recipes = _.orderBy(response.data, 'voteCount', 'desc');
+        this.setState({ savedRecipes: recipes });
       })
       .catch(console.log);
   }
@@ -71,15 +73,23 @@ class RecipeOptions extends React.Component {
   }
 
   decrementVote(recipe) {
-    axios.patch('api/savedRecipes',
-      { recipe, voteCount: recipe.voteCount - 1 })
-      .then(this.getSavedRecipes)
-      .catch(console.log);
+    if (recipe.voteCount > 1) {
+      axios.patch('api/savedRecipes',
+        { recipe, voteCount: recipe.voteCount - 1 })
+        .then(this.getSavedRecipes)
+        .catch(console.log);
+    } else {
+      this.removeRecipe(recipe);
+    }
   }
 
   removeRecipe(recipe) {
-    axios.delete('api/savedRecipes',
-      { title: recipe.title })
+    console.log('deleting ' + recipe.title);
+    axios({
+      method: 'delete',
+      url: 'api/savedRecipes',
+      data: { recipe },
+    })
       .then(this.getSavedRecipes)
       .catch(console.log);
   }

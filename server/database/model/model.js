@@ -36,7 +36,7 @@ module.exports = {
     saveRecipe.save({ validateBeforeSave: true }, cb);
   },
   archiveRecipe: (title, cb) => {
-    Recipe.findOneAndUpdate({ title }, { $set: { isSaved: false } }, cb);
+    Recipe.findOneAndUpdate({ title, isSaved: true }, { $set: { isSaved: false } }, cb);
   },
   updateVote: (recipe, voteCount, cb) => {
     console.log(voteCount);
