@@ -27,6 +27,9 @@ module.exports = {
   removeAllIngredients: (cb) => {
     Ingredient.updateMany({}, { $set: { isDeleted: true } }, cb);
   },
+  getSavedRecipes: (cb) => {
+    Recipe.find({ isSaved: true }, cb);
+  },
   saveRecipe: (recipe, cb) => {
     const saveRecipe = new Recipe(recipe);
     saveRecipe.isSaved = true;
@@ -34,5 +37,9 @@ module.exports = {
   },
   archiveRecipe: (title, cb) => {
     Recipe.findOneAndUpdate({ title }, { $set: { isSaved: false } }, cb);
+  },
+  updateVote: (recipe, voteCount, cb) => {
+    console.log(voteCount);
+    Recipe.findOneAndUpdate(recipe, { $set: { voteCount } }, cb);
   },
 };

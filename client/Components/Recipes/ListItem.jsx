@@ -22,21 +22,10 @@ const RecipeWrap = styled.div`
 class ListItem extends React.Component {
   constructor(props) {
     super(props);
+    const { recipe } = this.props;
     this.state = {
-      count: 0,
+      count: recipe.voteCount,
     };
-    this.increment = this.increment.bind(this);
-    this.decrement = this.decrement.bind(this);
-  }
-
-  increment() {
-    const { count } = this.state;
-    this.setState({ count: count + 1 });
-  }
-
-  decrement() {
-    const { count } = this.state;
-    this.setState({ count: count - 1 });
   }
 
   render() {
@@ -46,8 +35,8 @@ class ListItem extends React.Component {
       <Wrapper>
         <VoterWrap>
           <Voter
-            increment={increment || this.increment}
-            decrement={decrement || this.decrement}
+            increment={() => increment(recipe)}
+            decrement={() => decrement(recipe)}
             recipe={recipe}
             count={count}
           />
@@ -64,12 +53,12 @@ class ListItem extends React.Component {
 
 ListItem.propTypes = {
   // ingredients: PropTypes.string,
-  recipe: PropTypes.objectOf(PropTypes.string).isRequired,
-  increment: PropTypes.func,
-  decrement: PropTypes.func,
-};
-
-ListItem.defaultProps = {
+  recipe: PropTypes.shape({
+    title: PropTypes.string,
+    voteCount: PropTypes.number,
+  }).isRequired,
+  increment: PropTypes.func.isRequired,
+  decrement: PropTypes.func.isRequired,
 };
 
 export default ListItem;

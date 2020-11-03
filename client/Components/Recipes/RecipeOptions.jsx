@@ -24,11 +24,20 @@ class RecipeOptions extends React.Component {
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
     this.getSavedRecipes = this.getSavedRecipes.bind(this);
+    this.incrementVote = this.incrementVote.bind(this);
+    this.decrementVote = this.decrementVote.bind(this);
+  }
+
+  componentDidMount() {
+    this.getSavedRecipes();
   }
 
   getSavedRecipes() {
     axios.get('/api/savedRecipes')
-      .then((response) => this.setState({ savedRecipes: response.data }))
+      .then((response) => {
+        console.log(response.data);
+        this.setState({ savedRecipes: response.data });
+      })
       .catch(console.log);
   }
 
@@ -39,10 +48,11 @@ class RecipeOptions extends React.Component {
       href: recipe.href,
       ingredients: recipe.ingredients,
       thumbnail: recipe.thumbnail,
+      voteCount: 1,
+      isSaved: true,
+    };
 
-    }
-
-    axios.post('/api/savedRecipies', recipe)
+    axios.post('/api/savedRecipes', upload)
       .then(this.getSavedRecipes)
       .catch(console.log);
 
@@ -53,12 +63,25 @@ class RecipeOptions extends React.Component {
     this.setState({ savedRecipes });
   }
 
-  updateRecipeCount() {
+  incrementVote(recipe) {
+    axios.patch('api/savedRecipes',
+      { recipe, voteCount: recipe.voteCount + 1 })
+      .then(this.getSavedRecipes)
+      .catch(console.log);
+  }
 
+  decrementVote(recipe) {
+    axios.patch('api/savedRecipes',
+      { recipe, voteCount: recipe.voteCount - 1 })
+      .then(this.getSavedRecipes)
+      .catch(console.log);
   }
 
   removeRecipe(recipe) {
-    console.log(recipe);
+    axios.delete('api/savedRecipes',
+      { title: recipe.title })
+      .then(this.getSavedRecipes)
+      .catch(console.log);
   }
 
   render() {
@@ -69,6 +92,8 @@ class RecipeOptions extends React.Component {
         <ListItem
           key={Math.random()}
           recipe={recipe}
+          increment={this.incrementVote}
+          decrement={this.decrementVote}
         />
       ),
     );

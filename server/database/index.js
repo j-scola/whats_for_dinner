@@ -21,6 +21,7 @@ const recipes = new mongoose.Schema({
   ingredients: String,
   thumbnail: String,
   isSaved: Boolean,
+  voteCount: Number,
 });
 
 const Ingredient = db.model('Ingredient', ingredients);

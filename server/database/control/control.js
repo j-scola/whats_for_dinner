@@ -38,8 +38,17 @@ module.exports = {
         res.sendStatus(400);
       });
   },
+  getSavedRecipes: (req, res) => {
+    model.getSavedRecipes(defaultCallback(req, res, 400, 200));
+  },
   saveRecipe: (req, res) => {
-    model.saveRecipe(req.body.recipe, defaultCallback(req, res, 400, 201));
+    model.saveRecipe(req.body, defaultCallback(req, res, 400, 201));
+  },
+  archiveRecipe: (req, res) => {
+    model.archiveRecipe(req.body.recipe.title, defaultCallback(req, res, 400, 202));
+  },
+  updateVote: (req, res) => {
+    model.updateVote(req.body.recipe, req.body.voteCount, defaultCallback(req, res, 400, 201));
   },
 
 };

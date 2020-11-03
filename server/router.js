@@ -9,9 +9,13 @@ router.get('/', (req, res) => {
 
 router.get('/ingredients', control.getIngredients);
 router.get('/recipes', control.getRecipes);
+router.get('/savedRecipes', control.getSavedRecipes);
 router.post('/ingredients', control.addIngredient);
+router.post('/savedRecipes', control.saveRecipe);
 router.patch('/ingredients', control.updateIngredient);
+router.patch('/savedRecipes', control.updateVote);
 router.delete('/ingredients/one', control.removeIngredient);
 router.delete('/ingredients/all', control.removeAllIngredients);
+router.delete('/savedRecipes', control.archiveRecipe);
 
 module.exports = router;
