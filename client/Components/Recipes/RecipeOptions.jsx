@@ -44,11 +44,10 @@ class RecipeOptions extends React.Component {
   }
 
   timer() {
-    console.log('timer');
     setTimeout(() => {
       this.getSavedRecipes();
       this.timer();
-    }, 4000);
+    }, 8000);
   }
 
   saveRecipe(recipe) {

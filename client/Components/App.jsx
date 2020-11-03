@@ -17,7 +17,6 @@ const AppContainer = styled.div`
 
 const RecipeListPanel = styled.div`
   width: 40%;
-
 `;
 
 class App extends React.Component {
@@ -26,16 +25,27 @@ class App extends React.Component {
     this.state = {
       ingredients: [],
       recipes: [],
+      editingIngredients: false,
+      editTarget: '',
       // recipeMode: true,
     };
     this.getIngredients = this.getIngredients.bind(this);
     this.addIngredient = this.addIngredient.bind(this);
     this.resetList = this.resetList.bind(this);
     this.getRecipes = this.getRecipes.bind(this);
+    this.timer = this.timer.bind(this);
+    this.editIngredient = this.editIngredient.bind(this);
+    this.handleEditing = this.handleEditing.bind(this);
   }
 
   componentDidMount() {
     this.getIngredients();
+    this.timer();
+  }
+
+  shouldComponentUpdate() {
+    const { editingIngredients } = this.state;
+    return !editingIngredients;
   }
 
   getIngredients() {
@@ -66,8 +76,25 @@ class App extends React.Component {
     };
     const string = stringMaker(ingredients);
     axios.get(`api/recipes?i=${string}`)
-      .then((response) => this.setState({ recipes: response.data }, console.log))
+      .then((response) => this.setState({ recipes: response.data }))
       .catch(console.log);
+  }
+
+  timer() {
+    setTimeout(() => {
+      const { editingIngredients } = this.state;
+      if (!editingIngredients) {
+        this.getIngredients();
+      }
+      this.timer();
+    }, 8000);
+  }
+
+  handleEditing(bool, ingredient) {
+    this.setState({
+      editingIngredients: bool,
+      editTarget: (bool ? ingredient : ''),
+    }, this.getIngredients);
   }
 
   addIngredient(name) {
@@ -77,7 +104,25 @@ class App extends React.Component {
       .catch(console.log);
   }
 
-  // add api call to remove or strikethrough ??
+  removeIngredient(name) {
+    axios({
+      method: 'delete',
+      url: '/api/ingredients',
+      data: { name },
+    })
+      .then(this.getIngredients)
+      .catch(console.log);
+  }
+
+  editIngredient(queryName, update) {
+    axios({
+      method: 'patch',
+      url: '/api/ingredients',
+      data: { queryName, update },
+    })
+      .then(this.getIngredients)
+      .catch(console.log);
+  }
 
   resetList() {
     axios.delete('/api/ingredients/all')
@@ -86,12 +131,21 @@ class App extends React.Component {
   }
 
   render() {
-    const { ingredients, recipes } = this.state;
+    const {
+      ingredients, recipes, editingIngredients, editTarget,
+    } = this.state;
     return (
       <AppContainer>
         <div className="formPanel">
           <IngredientsForm addIngredient={this.addIngredient} />
-          <IngredientsList ingredients={ingredients} />
+          <IngredientsList
+            ingredients={ingredients}
+            remove={this.removeIngredient}
+            edit={this.editIngredient}
+            handleEditing={this.handleEditing}
+            editing={editingIngredients}
+            editTarget={editTarget}
+          />
           <ClearIngredients resetList={this.resetList} />
         </div>
         <RecipeListPanel>
