@@ -19,6 +19,23 @@ const RecipeListPanel = styled.div`
   width: 40%;
 `;
 
+const IngredientsListPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: sticky;
+  top: 0;
+`;
+
+const IngredientsModule = styled.div`
+  height: 45%;
+`;
+
+const ChatModule = styled.div`
+  height: 35%;
+  margin-top: 20%;
+`;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -51,14 +68,17 @@ class App extends React.Component {
   getIngredients() {
     axios.get('/api/ingredients')
       .then((response) => {
-        const ingredients = response.data.map((item) => item.name);
-        this.setState({ ingredients }, () => {
-          if (response.data.length) {
-            this.getRecipes();
-          } else {
-            this.setState({ recipes: [] });
-          }
-        });
+        const { ingredients } = this.state;
+        const update = response.data.map((item) => item.name);
+        if (!_.isEqual(ingredients, update)) {
+          this.setState({ ingredients: update }, () => {
+            if (response.data.length) {
+              this.getRecipes();
+            } else {
+              this.setState({ recipes: [] });
+            }
+          });
+        }
       })
       .catch(console.log);
   }
@@ -104,21 +124,21 @@ class App extends React.Component {
       .catch(console.log);
   }
 
-  removeIngredient(name) {
+  removeIngredient(ingredient) {
     axios({
       method: 'delete',
-      url: '/api/ingredients',
-      data: { name },
+      url: `/api/ingredients/one/${ingredient}`,
+      data: { name: ingredient },
     })
       .then(this.getIngredients)
       .catch(console.log);
   }
 
-  editIngredient(queryName, update) {
+  editIngredient(target, update) {
     axios({
       method: 'patch',
       url: '/api/ingredients',
-      data: { queryName, update },
+      data: { target, update },
     })
       .then(this.getIngredients)
       .catch(console.log);
@@ -136,18 +156,23 @@ class App extends React.Component {
     } = this.state;
     return (
       <AppContainer>
-        <div className="formPanel">
-          <IngredientsForm addIngredient={this.addIngredient} />
-          <IngredientsList
-            ingredients={ingredients}
-            remove={this.removeIngredient}
-            edit={this.editIngredient}
-            handleEditing={this.handleEditing}
-            editing={editingIngredients}
-            editTarget={editTarget}
-          />
-          <ClearIngredients resetList={this.resetList} />
-        </div>
+        <IngredientsListPanel>
+          <IngredientsModule>
+            <IngredientsForm addIngredient={this.addIngredient} />
+            <IngredientsList
+              ingredients={ingredients}
+              remove={this.removeIngredient}
+              edit={this.editIngredient}
+              handleEditing={this.handleEditing}
+              editing={editingIngredients}
+              editTarget={editTarget}
+            />
+            <ClearIngredients resetList={this.resetList} />
+          </IngredientsModule>
+          <ChatModule>
+            chat
+          </ChatModule>
+        </IngredientsListPanel>
         <RecipeListPanel>
           <h2>Recipe Options</h2>
           <RecipeOptions recipes={recipes} />

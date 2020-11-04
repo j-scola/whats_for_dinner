@@ -18,10 +18,11 @@ module.exports = {
     model.addIngredient(req.body, defaultCallback(req, res, 500, 201));
   },
   updateIngredient: (req, res) => {
-    const { target, newInfo } = req.body;
-    model.updateIngredient(target, newInfo, defaultCallback(req, res, 500, 201));
+    const { target, update } = req.body;
+    model.updateIngredient(target, update, defaultCallback(req, res, 500, 201));
   },
   removeIngredient: (req, res) => {
+    console.log(req.body);
     model.removeIngredient(req.body, defaultCallback(req, res, 500, 202));
   },
   removeAllIngredients: (req, res) => {

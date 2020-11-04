@@ -80,7 +80,7 @@ class ListItem extends React.Component {
         <div>{ingredient}</div>
         <div>
           <Change type="button" className="updateIngredient" onClick={() => handleEditing(!editing, ingredient)}>edit</Change>
-          <Change type="button" className="removeIngredient" onClick={remove}>remove</Change>
+          <Change type="button" className="removeIngredient" onClick={() => remove(ingredient)}>remove</Change>
         </div>
       </Item>
     );

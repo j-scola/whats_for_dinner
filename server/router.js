@@ -14,7 +14,7 @@ router.post('/ingredients', control.addIngredient);
 router.post('/savedRecipes', control.saveRecipe);
 router.patch('/ingredients', control.updateIngredient);
 router.patch('/savedRecipes', control.updateVote);
-router.delete('/ingredients/one', control.removeIngredient);
+router.delete('/ingredients/one/:ingredient', control.removeIngredient);
 router.delete('/ingredients/all', control.removeAllIngredients);
 router.delete('/savedRecipes', control.archiveRecipe);
 

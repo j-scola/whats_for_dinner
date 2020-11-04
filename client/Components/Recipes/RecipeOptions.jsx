@@ -122,7 +122,7 @@ class RecipeOptions extends React.Component {
     return (
       <div>
         <SavedList>
-          Saved Recipes:
+          Dinner Candidates:
           <ul>
             {savedList}
           </ul>

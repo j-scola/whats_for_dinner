@@ -21,6 +21,7 @@ module.exports = {
     Ingredient.findOneAndUpdate(target, update, cb);
   },
   removeIngredient: (info, cb) => {
+    console.log(info.name);
     const query = {
       isDeleted: false,
       name: info.name,
